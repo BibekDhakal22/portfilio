@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bibek Dhakal — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c9a84c;--gold-light:#e8c97a;--gold-pale:#f5e9c8;
+  --dark:#0a0a0a;--dark2:#111111;--dark3:#1a1a1a;--dark4:#252525;
+  --text:#e8e2d6;--text-muted:#9a9080;
+}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--text);font-family:'Montserrat',sans-serif;font-weight:300;overflow-x:hidden;cursor:none}
+.cursor{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s ease}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;opacity:.6}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:2rem 4rem;background:linear-gradient(to bottom,rgba(10,10,10,.97),transparent)}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;letter-spacing:.3em;color:var(--gold);text-transform:uppercase}
+.nav-links{display:flex;gap:3rem;list-style:none}
+.nav-links a{color:var(--text-muted);text-decoration:none;font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:0 4rem;position:relative;overflow:hidden}
+.hero-bg-line{position:absolute;right:12%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--gold) 30%,var(--gold) 70%,transparent);opacity:.12}
+.hero-number{position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',serif;font-size:22rem;font-weight:300;color:var(--dark3);line-height:1;user-select:none;animation:fadeInRight 1.4s ease forwards;opacity:0}
+.hero-label{font-size:.58rem;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;animation:fadeInUp .9s ease .2s forwards;opacity:0}
+.hero-name{font-family:'Cormorant Garamond',serif;font-size:clamp(4rem,9vw,8rem);font-weight:300;line-height:1.05;animation:fadeInUp .9s ease .4s forwards;opacity:0}
+.hero-name em{font-style:italic;color:var(--gold-light)}
+.hero-sub{margin-top:2rem;font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-muted);animation:fadeInUp .9s ease .6s forwards;opacity:0}
+.hero-cta{margin-top:4rem;display:flex;gap:1.5rem;flex-wrap:wrap;animation:fadeInUp .9s ease .8s forwards;opacity:0}
+.btn-gold{display:inline-block;padding:1rem 3rem;border:1px solid var(--gold);color:var(--gold);text-decoration:none;font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;transition:all .3s;position:relative;overflow:hidden;cursor:none}
+.btn-gold::before{content:'';position:absolute;inset:0;background:var(--gold);transform:translateX(-101%);transition:transform .3s;z-index:-1}
+.btn-gold:hover{color:var(--dark)}
+.btn-gold:hover::before{transform:translateX(0)}
+.btn-outline{display:inline-block;padding:1rem 2.5rem;border:1px solid var(--dark4);color:var(--text-muted);text-decoration:none;font-size:.58rem;letter-spacing:.35em;text-transform:uppercase;transition:all .3s;cursor:none}
+.btn-outline:hover{border-color:var(--text-muted);color:var(--text)}
+
+.scroll-indicator{position:absolute;bottom:3rem;left:4rem;display:flex;align-items:center;gap:1rem;animation:fadeIn 1.5s ease 1.5s forwards;opacity:0}
+.scroll-line{width:60px;height:1px;background:var(--gold);position:relative;overflow:hidden}
+.scroll-line::after{content:'';position:absolute;inset:0;background:var(--dark);animation:scrollAnim 2s ease infinite}
+.scroll-text{font-size:.52rem;letter-spacing:.3em;color:var(--text-muted);text-transform:uppercase}
+
+section{padding:8rem 4rem;position:relative}
+.section-header{display:flex;align-items:center;gap:2rem;margin-bottom:5rem}
+.section-num{font-family:'Cormorant Garamond',serif;font-size:4rem;font-weight:300;color:var(--dark4);line-height:1;user-select:none}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;letter-spacing:.02em;white-space:nowrap}
+.section-title em{color:var(--gold-light);font-style:italic}
+.section-line{flex:1;height:1px;background:linear-gradient(to right,var(--gold),transparent);opacity:.3}
+
+#about{background:var(--dark2)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.about-text p{font-size:1rem;line-height:1.95;color:var(--text-muted);margin-bottom:1.5rem}
+.about-text p strong{color:var(--text);font-weight:400}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.stat-box{background:var(--dark3);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:background .3s}
+.stat-box:hover{background:var(--dark4)}
+.stat-box::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.stat-box:hover::after{transform:scaleX(1)}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:300;color:var(--gold);line-height:1}
+.stat-label{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted);margin-top:.5rem}
+
+#skills{background:var(--dark)}
+.skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.skill-card{background:var(--dark2);padding:2.5rem 2rem;position:relative;overflow:hidden;transition:all .4s;cursor:none}
+.skill-card::before{content:'';position:absolute;top:0;left:0;width:2px;height:0;background:var(--gold);transition:height .4s}
+.skill-card:hover::before{height:100%}
+.skill-card:hover{background:var(--dark3);padding-left:3rem}
+.skill-icon{font-family:'Cormorant Garamond',serif;font-size:2.5rem;color:var(--dark4);font-weight:300;margin-bottom:1.2rem;transition:color .4s;line-height:1}
+.skill-card:hover .skill-icon{color:var(--gold)}
+.skill-name{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--text);margin-bottom:.8rem;font-weight:500}
+.skill-desc{font-size:.78rem;color:var(--text-muted);line-height:1.8}
+.skill-bar-wrap{margin-top:1.2rem;height:1px;background:var(--dark4);position:relative;overflow:hidden}
+.skill-bar{height:100%;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform 1s ease .2s}
+.skill-card:hover .skill-bar{transform:scaleX(1)}
+
+#projects{background:var(--dark2)}
+.projects-list{display:flex;flex-direction:column;gap:2px}
+.project-item{display:grid;grid-template-columns:70px 1fr auto;align-items:center;gap:2.5rem;padding:2.5rem 3rem;background:var(--dark3);transition:all .3s;cursor:none;position:relative;overflow:hidden;text-decoration:none;color:inherit}
+.project-item::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--gold) 0%,transparent 100%);opacity:0;transition:opacity .4s}
+.project-item:hover{background:var(--dark4)}
+.project-item:hover::after{opacity:.03}
+.project-num{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--dark4);transition:color .3s}
+.project-item:hover .project-num{color:var(--gold)}
+.project-info h3{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:300;margin-bottom:.4rem;transition:color .3s}
+.project-item:hover .project-info h3{color:var(--gold-light)}
+.project-desc{font-size:.72rem;color:var(--text-muted);line-height:1.6;margin-bottom:.8rem;max-width:600px}
+.project-tags{display:flex;gap:.8rem;flex-wrap:wrap}
+.tag{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-muted);padding:.3rem .8rem;border:1px solid var(--dark4);transition:all .3s}
+.project-item:hover .tag{border-color:var(--gold);color:var(--gold)}
+.project-arrow{font-size:1.4rem;color:var(--dark4);transition:all .3s;flex-shrink:0}
+.project-item:hover .project-arrow{color:var(--gold);transform:translate(4px,-4px)}
+.project-badge{display:inline-block;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;padding:.25rem .7rem;border:1px solid var(--gold);color:var(--gold);margin-bottom:.6rem}
+
+#contact{background:var(--dark)}
+.contact-inner{max-width:700px;margin:0 auto;text-align:center}
+.contact-headline{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,6vw,5rem);font-weight:300;line-height:1.1;margin-bottom:2rem}
+.contact-headline em{font-style:italic;color:var(--gold-light)}
+.contact-sub{font-size:.72rem;letter-spacing:.2em;color:var(--text-muted);margin-bottom:4rem}
+.contact-email{display:block;font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--gold);text-decoration:none;letter-spacing:.05em;border-bottom:1px solid transparent;padding-bottom:.5rem;transition:border-color .3s;margin-bottom:4rem}
+.contact-email:hover{border-color:var(--gold);cursor:none}
+.social-links{display:flex;justify-content:center;gap:3rem;flex-wrap:wrap}
+.social-link{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-muted);text-decoration:none;transition:color .3s}
+.social-link:hover{color:var(--gold);cursor:none}
+
+footer{padding:2rem 4rem;display:flex;justify-content:space-between;border-top:1px solid var(--dark3)}
+footer span{font-size:.58rem;letter-spacing:.2em;color:var(--dark4);text-transform:uppercase}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInRight{from{opacity:0;transform:translateY(-50%) translateX(40px)}to{opacity:.05;transform:translateY(-50%) translateX(0)}}
+@keyframes scrollAnim{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.25s}
+.reveal-delay-3{transition-delay:.4s}
+.reveal-delay-4{transition-delay:.55s}
+.reveal-delay-5{transition-delay:.7s}
+
+@media(max-width:900px){
+  nav{padding:1.5rem 2rem}
+  .nav-links{gap:1.5rem}
+  section{padding:5rem 2rem}
+  #hero{padding:0 2rem}
+  .about-grid{grid-template-columns:1fr;gap:3rem}
+  .skills-grid{grid-template-columns:1fr 1fr}
+  .project-item{grid-template-columns:50px 1fr auto;gap:1.5rem;padding:2rem 1.5rem}
+  .hero-number{font-size:10rem}
+  footer{padding:1.5rem 2rem;flex-direction:column;gap:.5rem}
+}
+@media(max-width:600px){
+  .skills-grid{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hero-number{font-size:6rem}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <div class="nav-logo">BD</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-line"></div>
+  <div class="hero-number">B</div>
+  <p class="hero-label">Frontend Developer · Nepal</p>
+  <h1 class="hero-name">Bibek<br><em>Dhakal</em></h1>
+  <p class="hero-sub">Crafting elegant digital experiences · BCA Graduate · Tribhuvan University</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn-gold">View Projects</a>
+    <a href="https://github.com/BibekDhakal22" target="_blank" class="btn-outline">GitHub ↗</a>
+  </div>
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-header reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-title">About <em>Me</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal reveal-delay-1">
+      <p>I'm a <strong>Frontend Developer from Nepal</strong>, passionate about building elegant, high-performance web and mobile applications. Currently deepening expertise in <strong>React, Next.js, Redux and Tailwind CSS</strong>.</p>
+      <p>I hold a <strong>BCA degree from Tribhuvan University</strong>, where I built full-stack projects solving real-world problems — from AI-powered agricultural tools to alumni management systems.</p>
+      <p>Proficient in <strong>JavaScript, Java, PHP, MySQL and C#</strong> — I love bridging creative frontend work with solid backend architecture.</p>
+    </div>
+    <div class="about-stats reveal reveal-delay-2">
+      <div class="stat-box">
+        <div class="stat-num">13+</div>
+        <div class="stat-label">Repositories</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">6</div>
+        <div class="stat-label">Pinned Projects</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Technologies</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">TU</div>
+        <div class="stat-label">BCA Graduate</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Skills & <em>Tools</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal reveal-delay-1">
+      <div class="skill-icon">{ }</div>
+      <div class="skill-name">Frontend</div>
+      <div class="skill-desc">React.js, Next.js, Redux, Tailwind CSS, Bootstrap, HTML5, CSS3</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+    </div>
+    <div class="skill-card reveal reveal-delay-2">
+      <div class="skill-icon">⬡</div>
+      <div class="skill-name">Backend</div>
+      <div class="skill-desc">Python Flask, PHP, Node.js, ASP.NET, REST APIs, Postman</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:82%"></div></div>
+    </div>
+    <div class="skill-card reveal reveal-delay-3">
+      <div class="skill-icon">◈</div>
+      <div class="skill-name">Database</div>
+      <div class="skill-desc">MySQL, PostgreSQL, SQLite, Realm — database design & optimization</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:78%"></div></div>
+    </div>
+    <div class="skill-card reveal reveal-delay-1">
+      <div class="skill-icon">◎</div>
+      <div class="skill-name">Mobile</div>
+      <div class="skill-desc">React Native, Android development — cross-platform mobile apps</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:72%"></div></div>
+    </div>
+    <div class="skill-card reveal reveal-delay-2">
+      <div class="skill-icon">△</div>
+      <div class="skill-name">Languages</div>
+      <div class="skill-desc">JavaScript, Java, C#, C++, PHP — strong multi-language foundation</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+    </div>
+    <div class="skill-card reveal reveal-delay-3">
+      <div class="skill-icon">✦</div>
+      <div class="skill-name">Tools</div>
+      <div class="skill-desc">Figma, Git, AWS, Unity, Unreal Engine, Photoshop, Linux</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Real <em>Projects</em></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="projects-list">
+
+    <a href="https://github.com/BibekDhakal22/krishi_sahayak" target="_blank" class="project-item reveal reveal-delay-1">
+      <div class="project-num">01</div>
+      <div class="project-info">
+        <div class="project-badge">Featured</div>
+        <h3>Krishi Sahayak</h3>
+        <p class="project-desc">AI-powered Smart Agriculture Assistant for Nepali farmers — crop advisory, pest management, real-time weather tips, and a bilingual AI chatbot in Nepali & English using LLaMA 3.3.</p>
+        <div class="project-tags">
+          <span class="tag">React.js</span>
+          <span class="tag">Python Flask</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">Groq API</span>
+          <span class="tag">LLaMA 3.3</span>
+          <span class="tag">OpenWeatherMap</span>
+        </div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <a href="https://github.com/BibekDhakal22/alumni-tracker" target="_blank" class="project-item reveal reveal-delay-2">
+      <div class="project-num">02</div>
+      <div class="project-info">
+        <div class="project-badge">Final Year Project</div>
+        <h3>Alumni Tracker System</h3>
+        <p class="project-desc">Full-stack Alumni Tracking System for BCA — profile management, admin panel, analytics dashboard with Chart.js, CSV export, PDF reports and a notice board.</p>
+        <div class="project-tags">
+          <span class="tag">Python Flask</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">Chart.js</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <a href="https://github.com/BibekDhakal22/alumni-tracker-frontend" target="_blank" class="project-item reveal reveal-delay-3">
+      <div class="project-num">03</div>
+      <div class="project-info">
+        <h3>Alumni Tracker — React Frontend</h3>
+        <p class="project-desc">Modern React frontend for the Alumni Tracker — rewritten with component-based architecture, dynamic routing, and a polished responsive UI.</p>
+        <div class="project-tags">
+          <span class="tag">React.js</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">CSS3</span>
+        </div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <a href="https://github.com/BibekDhakal22/ASP.NET_Web_API" target="_blank" class="project-item reveal reveal-delay-4">
+      <div class="project-num">04</div>
+      <div class="project-info">
+        <h3>ASP.NET Web API</h3>
+        <p class="project-desc">Enterprise-grade RESTful Web API built with ASP.NET and C# — structured architecture, CRUD operations, and clean controller patterns.</p>
+        <div class="project-tags">
+          <span class="tag">C#</span>
+          <span class="tag">ASP.NET</span>
+          <span class="tag">REST API</span>
+          <span class="tag">.NET</span>
+        </div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <a href="https://github.com/BibekDhakal22/Student_Managment_System" target="_blank" class="project-item reveal reveal-delay-5">
+      <div class="project-num">05</div>
+      <div class="project-info">
+        <h3>Student Management System</h3>
+        <p class="project-desc">Desktop-grade Student Management System built in Java — handling records, enrollment, grades and reports with a clean OOP architecture.</p>
+        <div class="project-tags">
+          <span class="tag">Java</span>
+          <span class="tag">OOP</span>
+          <span class="tag">Database</span>
+        </div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <h2 class="contact-headline reveal">Let's build something <em>remarkable</em></h2>
+    <p class="contact-sub reveal reveal-delay-1">Open to freelance, full-time & collaborative opportunities</p>
+    <a href="mailto:dhakalbibek36@gmail.com" class="contact-email reveal reveal-delay-2">dhakalbibek36@gmail.com</a>
+    <div class="social-links reveal reveal-delay-3">
+      <a href="https://github.com/BibekDhakal22" target="_blank" class="social-link">GitHub</a>
+      <a href="https://www.linkedin.com/in/bibek-dhakal-057b04261/" target="_blank" class="social-link">LinkedIn</a>
+      <a href="https://dev.to/bibek_dhakal_ee845150e2d6" target="_blank" class="social-link">Dev.to</a>
+      <a href="https://stackoverflow.com/users/31329560/bibek-dhakal" target="_blank" class="social-link">Stack Overflow</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Bibek Dhakal</span>
+  <span>Built with precision · Nepal</span>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX;my=e.clientY;
+  cursor.style.left=mx+'px';cursor.style.top=my+'px';
+});
+(function animRing(){
+  rx+=(mx-rx)*.12;ry+=(my-ry)*.12;
+  ring.style.left=rx+'px';ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+})();
+document.querySelectorAll('a,button,.skill-card,.stat-box').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(2)';
+    ring.style.transform='translate(-50%,-50%) scale(1.5)';
+    ring.style.opacity='.3';
+  });
+  el.addEventListener('mouseleave',()=>{
+    cursor.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.transform='translate(-50%,-50%) scale(1)';
+    ring.style.opacity='.6';
+  });
+});
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
