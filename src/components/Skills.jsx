@@ -5,8 +5,8 @@ import { playHoverSound, playClickSound } from '../utils/soundEffects';
 
 const LEVEL_FILTERS = [
   { id: 'all', label: 'All Levels' },
-  { id: 'mastered', label: 'Expert (90%+)', min: 90 },
-  { id: 'advanced', label: 'Advanced (80%+)', min: 80 },
+  { id: 'mastered', label: 'Expert', min: 90 },
+  { id: 'advanced', label: 'Advanced', min: 80 },
 ];
 
 export default function Skills() {
@@ -137,21 +137,13 @@ export default function Skills() {
                     <span className="sk-cat-tag">{skill.category}</span>
                   </div>
                   <div className="sk-level-badge">
-                    <span className="sk-pct-number">{skill.level}%</span>
+                    <span className="sk-level-tag">
+                      {skill.level >= 90 ? 'Expert' : skill.level >= 80 ? 'Advanced' : 'Proficient'}
+                    </span>
                   </div>
                 </div>
 
                 <p className="sk-desc">{skill.description}</p>
-
-                {/* Animated progress bar */}
-                <div className="sk-prog-wrap">
-                  <div className="sk-prog-track">
-                    <div
-                      className="sk-prog-bar"
-                      style={{ width: `${skill.level}%` }}
-                    />
-                  </div>
-                </div>
 
                 {/* Connected Projects */}
                 {skill.projects && (
