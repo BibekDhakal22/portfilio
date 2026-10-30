@@ -1530,10 +1530,12 @@ body {
   color: var(--text-muted);
 }
 
-.sk-pct-number {
+.sk-level-tag {
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.68rem;
   font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--gold);
 }
 
@@ -5044,10 +5046,13 @@ body {
 }
 
 .sk-level-badge {
-  background: rgba(212, 175, 55, 0.1);
+  background: var(--gold-subtle);
   border: 1px solid var(--border-medium);
-  padding: 0.15rem 0.45rem;
-  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sk-proj-pill {
