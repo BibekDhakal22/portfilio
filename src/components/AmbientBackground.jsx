@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-export default function AmbientBackground() {
+export default function AmbientBackground({ theme }) {
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ export default function AmbientBackground() {
         vy: (Math.random() - 0.5) * 0.35,
         radius: Math.random() * 1.5 + 0.6,
         baseAlpha: Math.random() * 0.35 + 0.15,
-        color: i % 2 === 0 ? 'rgba(56, 189, 248, ' : 'rgba(129, 140, 248, ',
+        colorIndex: i % 2,
       });
     }
 
@@ -55,6 +55,12 @@ export default function AmbientBackground() {
 
       ctx.clearRect(0, 0, width, height);
 
+      const isLight = (theme === 'light') || (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'light');
+      const color1 = isLight ? 'rgba(37, 99, 235, ' : 'rgba(56, 189, 248, ';
+      const color2 = isLight ? 'rgba(79, 70, 229, ' : 'rgba(129, 140, 248, ';
+      const lineBaseColor = isLight ? 'rgba(37, 99, 235, ' : 'rgba(56, 189, 248, ';
+      const lineMultiplier = isLight ? 0.22 : 0.12;
+
       // Render & update particles
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
@@ -72,19 +78,20 @@ export default function AmbientBackground() {
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        let alpha = p.baseAlpha;
+        let alpha = isLight ? Math.min(p.baseAlpha * 1.6, 0.95) : p.baseAlpha;
 
         if (dist < 180) {
           const force = (180 - dist) / 180;
           p.x += (dx / dist) * force * 0.6;
           p.y += (dy / dist) * force * 0.6;
-          alpha = Math.min(p.baseAlpha + force * 0.5, 0.9);
+          alpha = Math.min(alpha + force * 0.5, 0.95);
         }
 
         // Draw particle
+        const particleColorPrefix = p.colorIndex === 0 ? color1 : color2;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `${p.color}${alpha})`;
+        ctx.fillStyle = `${particleColorPrefix}${alpha})`;
         ctx.fill();
 
         // Connect constellation lines to nearby particles
@@ -92,12 +99,12 @@ export default function AmbientBackground() {
           const p2 = particles[j];
           const dist2 = Math.hypot(p.x - p2.x, p.y - p2.y);
           if (dist2 < 110) {
-            const lineAlpha = (1 - dist2 / 110) * 0.12;
+            const lineAlpha = (1 - dist2 / 110) * lineMultiplier;
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(56, 189, 248, ${lineAlpha})`;
-            ctx.lineWidth = 0.6;
+            ctx.strokeStyle = `${lineBaseColor}${lineAlpha})`;
+            ctx.lineWidth = isLight ? 0.8 : 0.6;
             ctx.stroke();
           }
         }

@@ -41,10 +41,10 @@ export default function Timeline() {
                 }}
               >
                 {/* Content Card */}
-                <div className="timeline-card">
+                <div className="timeline-card spotlight-card">
                   <div className="tl-card-header">
                     <div className="tl-year-badge">
-                      <Calendar size={12} />
+                      <Calendar size={13} />
                       <span>{item.year}</span>
                     </div>
                     {item.badge && <span className="tl-category-tag">{item.badge}</span>}
@@ -53,7 +53,7 @@ export default function Timeline() {
                   <h3 className="tl-card-title">{item.title}</h3>
 
                   <div className="tl-location-row">
-                    <MapPin size={12} />
+                    <MapPin size={13} />
                     <span>{item.location}</span>
                   </div>
 
@@ -62,7 +62,7 @@ export default function Timeline() {
                   {/* Skills Gained */}
                   {item.skillsGained && (
                     <div className="tl-skills-row">
-                      <span className="tl-skills-label">Milestones:</span>
+                      <span className="tl-skills-label">Milestones & Technologies:</span>
                       <div className="tl-skills-pills">
                         {item.skillsGained.map((skill) => (
                           <span key={skill} className="tl-skill-tag">

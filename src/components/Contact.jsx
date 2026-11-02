@@ -1,28 +1,40 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { Mail, Phone, MapPin, Copy, Check, Send, Sparkles, MessageSquare, ArrowUpRight, Share2, BookOpen, Code2, Zap } from 'lucide-react';
+import { Mail, Phone, MapPin, Copy, Check, Send, Sparkles, MessageSquare, ArrowUpRight, Share2, BookOpen, Code2, Zap, Briefcase, Bot, Coffee } from 'lucide-react';
 import { Github, Linkedin } from './Icons';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { playHoverSound, playClickSound, playSuccessSound } from '../utils/soundEffects';
 
 const INQUIRY_PRESETS = [
   {
-    label: "💼 Full-Time Role",
+    id: "fulltime",
+    icon: Briefcase,
+    title: "Full-Time Role",
+    subtitle: "Software Engineer / Frontend Specialist",
     type: "Full-time Opportunity",
     template: "Hi Bibek,\n\nWe reviewed your portfolio and were really impressed by your full-stack engineering and AI integration work (especially Krishi Sahayak). We'd love to discuss a Software Developer / Frontend Specialist opportunity with our team.\n\nBest regards,"
   },
   {
-    label: "🤝 Freelance / Contract",
+    id: "freelance",
+    icon: Zap,
+    title: "Freelance Project",
+    subtitle: "Modern Web, React & UI/UX Architecture",
     type: "Freelance Project",
     template: "Hi Bibek,\n\nI have a project involving modern web architecture and interactive UI/UX that I'd like to collaborate on. Are you currently available for freelance or contract engagements?\n\nLooking forward to hearing from you,"
   },
   {
-    label: "🤖 AI & LLM Solution",
+    id: "ai",
+    icon: Bot,
+    title: "AI & LLM Solution",
+    subtitle: "LLaMA 3.3, Groq API & Intelligent Systems",
     type: "AI & Full-Stack Collaboration",
     template: "Hi Bibek,\n\nI saw your implementation of LLaMA 3.3 via Groq API and would love to explore an AI-powered conversational or computer vision solution for our organization.\n\nRegards,"
   },
   {
-    label: "☕ Coffee Chat",
+    id: "chat",
+    icon: Coffee,
+    title: "Coffee & Tech Chat",
+    subtitle: "Network, Discuss React, 3D & Systems",
     type: "General Inquiry / Coffee Chat",
     template: "Hi Bibek,\n\nLove your work! I’d love to connect, talk tech, and exchange insights about React, 3D WebGL, and the software ecosystem in Nepal.\n\nCheers,"
   }
@@ -209,21 +221,45 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="contact-form">
-                {/* One-Click Quick Inquire Presets */}
-                <div className="form-presets-bar">
-                  <span className="presets-title">Quick Inquire Presets:</span>
-                  <div className="presets-row">
-                    {INQUIRY_PRESETS.map((p) => (
-                      <button
-                        key={p.label}
-                        type="button"
-                        onClick={() => applyPreset(p)}
-                        className={`preset-chip ${formData.inquiryType === p.type ? 'active' : ''}`}
-                        title="Click to pre-fill message template"
-                      >
-                        {p.label}
-                      </button>
-                    ))}
+                {/* Prominent Quick Inquiries Presets Card */}
+                <div className="form-presets-card">
+                  <div className="presets-card-header">
+                    <div className="presets-header-title">
+                      <Sparkles size={16} className="text-accent" />
+                      <span>One-Click Inquiry Presets</span>
+                    </div>
+                    <span className="presets-badge">Auto-fills Draft</span>
+                  </div>
+                  <p className="presets-intro-text">
+                    Select a collaboration preset below to instantly populate your message with an optimized draft:
+                  </p>
+                  <div className="presets-grid">
+                    {INQUIRY_PRESETS.map((p) => {
+                      const IconComponent = p.icon;
+                      const isSelected = formData.inquiryType === p.type;
+                      return (
+                        <button
+                          key={p.id}
+                          type="button"
+                          onClick={() => applyPreset(p)}
+                          className={`preset-card-btn ${isSelected ? 'active' : ''}`}
+                          title={`Select ${p.title}`}
+                        >
+                          <div className="preset-card-icon-wrap">
+                            <IconComponent size={18} />
+                          </div>
+                          <div className="preset-card-body">
+                            <span className="preset-card-title">{p.title}</span>
+                            <span className="preset-card-subtitle">{p.subtitle}</span>
+                          </div>
+                          {isSelected && (
+                            <span className="preset-selected-check">
+                              <Check size={14} />
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 

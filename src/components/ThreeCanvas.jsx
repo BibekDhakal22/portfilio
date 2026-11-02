@@ -9,13 +9,14 @@ const SHAPES = [
   { id: 'wave', name: 'Wave', icon: Waves },
 ];
 
-export default function ThreeCanvas() {
+export default function ThreeCanvas({ theme }) {
   const mountRef = useRef(null);
   const [activeShape, setActiveShape] = useState('sphere');
 
   const sceneRef = useRef(null);
   const rendererRef = useRef(null);
   const pointsRef = useRef(null);
+  const materialRef = useRef(null);
   const targetPosRef = useRef(null);
   const currentPosRef = useRef(null);
   const colorsRef = useRef(null);
@@ -131,9 +132,10 @@ export default function ThreeCanvas() {
     targetPosRef.current = targetPos;
     colorsRef.current = colors;
 
-    // Elegant dual gradient: Subtle Gold & Cyan highlights
-    const c1 = new THREE.Color('#e2b76e'); // Refined champagne gold
-    const c2 = new THREE.Color('#38bdf8'); // Precision cyan
+    // Elegant dual gradient: Subtle Gold & Cyan highlights (dark) or Rich Royal Blue & Cyan (light)
+    const isLightInitial = (theme === 'light') || (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'light');
+    const c1 = isLightInitial ? new THREE.Color('#1d4ed8') : new THREE.Color('#e2b76e');
+    const c2 = isLightInitial ? new THREE.Color('#0284c7') : new THREE.Color('#38bdf8');
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       const i3 = i * 3;
       const ratio = (i % 100) / 100;
@@ -160,16 +162,17 @@ export default function ThreeCanvas() {
     ctx.fillRect(0, 0, 64, 64);
     const texture = new THREE.CanvasTexture(canvas);
 
-    // MATERIAL
+    // MATERIAL: NormalBlending in light mode prevents white blowout; AdditiveBlending in dark mode provides luminous glow
     const material = new THREE.PointsMaterial({
-      size: 0.082,
+      size: isLightInitial ? 0.092 : 0.082,
       map: texture,
       vertexColors: true,
       transparent: true,
-      opacity: 0.88,
-      blending: THREE.AdditiveBlending,
+      opacity: isLightInitial ? 0.96 : 0.88,
+      blending: isLightInitial ? THREE.NormalBlending : THREE.AdditiveBlending,
       depthWrite: false,
     });
+    materialRef.current = material;
 
     const points = new THREE.Points(geometry, material);
     scene.add(points);
@@ -283,12 +286,40 @@ export default function ThreeCanvas() {
       if (renderer.domElement && container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
+      if (materialRef.current) materialRef.current = null;
       geometry.dispose();
       material.dispose();
       texture.dispose();
       renderer.dispose();
     };
   }, [generateShapePositions]);
+
+  // Update particle colors, size, opacity and blending when theme changes dynamically
+  useEffect(() => {
+    const isLight = (theme === 'light') || (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'light');
+
+    if (materialRef.current) {
+      materialRef.current.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
+      materialRef.current.opacity = isLight ? 0.96 : 0.88;
+      materialRef.current.size = isLight ? 0.092 : 0.082;
+      materialRef.current.needsUpdate = true;
+    }
+
+    if (pointsRef.current && colorsRef.current) {
+      const colors = colorsRef.current;
+      const c1 = isLight ? new THREE.Color('#1d4ed8') : new THREE.Color('#e2b76e');
+      const c2 = isLight ? new THREE.Color('#0284c7') : new THREE.Color('#38bdf8');
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const i3 = i * 3;
+        const ratio = (i % 100) / 100;
+        const mixed = c1.clone().lerp(c2, ratio * 0.4);
+        colors[i3] = mixed.r;
+        colors[i3 + 1] = mixed.g;
+        colors[i3 + 2] = mixed.b;
+      }
+      pointsRef.current.geometry.attributes.color.needsUpdate = true;
+    }
+  }, [theme]);
 
   return (
     <div

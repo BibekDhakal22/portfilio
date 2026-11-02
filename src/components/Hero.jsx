@@ -4,7 +4,7 @@ import { Github } from './Icons';
 import ThreeCanvas from './ThreeCanvas';
 import KrishiSandboxModal from './KrishiSandboxModal';
 
-export default function Hero() {
+export default function Hero({ theme }) {
   const [isSandboxOpen, setIsSandboxOpen] = useState(false);
 
   const techStack = [
@@ -94,9 +94,43 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* Right Graphic Column: Ambient Three.js 3D Canvas */}
-          <div className="hero-graphic-column">
-            <ThreeCanvas />
+          {/* Right Column: Bibek Dhakal Developer Portrait (In Place of Shape) */}
+          <div className="hero-portrait-column">
+            <div className="hero-portrait-wrapper">
+              {/* Backlight Ambient Glow */}
+              <div className="portrait-ambient-glow" />
+
+              {/* Technical Blueprint Corner HUD Crosshairs */}
+              <span className="hud-corner hud-tl" aria-hidden="true">+</span>
+              <span className="hud-corner hud-tr" aria-hidden="true">+</span>
+              <span className="hud-corner hud-bl" aria-hidden="true">+</span>
+              <span className="hud-corner hud-br" aria-hidden="true">+</span>
+
+              {/* Shaped Portrait Frame */}
+              <div className="portrait-frame">
+                <img
+                  src="/bibek-dhakal.jpg"
+                  alt="Bibek Dhakal — Software Developer & Frontend Specialist"
+                  className="portrait-image"
+                  loading="eager"
+                  draggable={false}
+                />
+                {/* Subtle lighting vignette overlay */}
+                <div className="portrait-gradient-overlay" />
+              </div>
+
+              {/* Top Floating Glass Badge */}
+              <div className="portrait-floating-chip chip-top">
+                <Sparkles size={13} className="text-accent" />
+                <span>BCA Graduate · TU</span>
+              </div>
+
+              {/* Bottom Floating Glass Badge */}
+              <div className="portrait-floating-chip chip-bottom">
+                <span className="status-ping-dot" />
+                <span>Available for SWE Roles</span>
+              </div>
+            </div>
           </div>
         </div>
 

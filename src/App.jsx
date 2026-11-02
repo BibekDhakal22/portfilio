@@ -39,7 +39,7 @@ export default function App() {
   return (
     <div className="app-root">
       {/* Subtle Ambient Particle Mesh */}
-      <AmbientBackground />
+      <AmbientBackground theme={theme} />
 
       {/* Scroll Progress Bar at very top */}
       <div
@@ -52,7 +52,7 @@ export default function App() {
 
       {/* Main Sections */}
       <main>
-        <Hero />
+        <Hero theme={theme} />
         <About />
         <Skills />
         <Projects />
