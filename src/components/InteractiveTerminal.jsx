@@ -24,19 +24,22 @@ export default function InteractiveTerminal() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isMatrixActive, setIsMatrixActive] = useState(false);
   const [isSandboxOpen, setIsSandboxOpen] = useState(false);
-  const terminalEndRef = useRef(null);
+  const terminalBodyRef = useRef(null);
   const inputRef = useRef(null);
   const matrixCanvasRef = useRef(null);
-
-  // Auto-scroll terminal on updates
-  useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [history]);
 
   // Execute terminal command
   const executeCommand = (rawCmd) => {
     const cmd = rawCmd.trim().toLowerCase();
     if (!cmd) return;
+
+    // Lock page window scroll position so the outer webpage NEVER scrolls
+    const currentWindowScrollY = window.scrollY;
+    requestAnimationFrame(() => {
+      if (Math.abs(window.scrollY - currentWindowScrollY) > 1) {
+        window.scrollTo({ top: currentWindowScrollY, behavior: 'instant' });
+      }
+    });
 
     // Add to command history
     setCmdHistory((prev) => [...prev, cmd]);
@@ -196,6 +199,9 @@ Specialized in React, Next.js, AI integration (LLaMA 3.3 via Groq), Python Flask
       case 'clear':
         setHistory([]);
         setInputVal('');
+        if (terminalBodyRef.current) {
+          terminalBodyRef.current.scrollTop = 0;
+        }
         return;
 
       case 'sudo':
@@ -221,6 +227,7 @@ Specialized in React, Next.js, AI integration (LLaMA 3.3 via Groq), Python Flask
   // Keyboard navigation for history
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
+      e.preventDefault();
       executeCommand(inputVal);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
@@ -313,7 +320,7 @@ Specialized in React, Next.js, AI integration (LLaMA 3.3 via Groq), Python Flask
         </div>
 
         {/* Terminal Window Box */}
-        <div className="terminal-window spotlight-card" onClick={() => inputRef.current?.focus()}>
+        <div className="terminal-window spotlight-card" onClick={() => inputRef.current?.focus({ preventScroll: true })}>
           {/* Matrix canvas background if active */}
           {isMatrixActive && <canvas ref={matrixCanvasRef} className="matrix-canvas" />}
 
@@ -340,7 +347,11 @@ Specialized in React, Next.js, AI integration (LLaMA 3.3 via Groq), Python Flask
               {quickCommands.map((cmd) => (
                 <button
                   key={cmd}
-                  onClick={() => executeCommand(cmd)}
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    executeCommand(cmd);
+                  }}
                   className={`term-chip ${cmd === 'ai' ? 'term-chip-highlight' : ''}`}
                 >
                   {cmd === 'ai' && <Sparkles size={11} className="mr-1 text-gold" />}
@@ -351,9 +362,12 @@ Specialized in React, Next.js, AI integration (LLaMA 3.3 via Groq), Python Flask
           </div>
 
           {/* Terminal Body */}
-          <div className="terminal-body">
+          <div className="terminal-body" ref={terminalBodyRef}>
             {history.map((item, idx) => (
-              <div key={idx} className={`term-line term-${item.type}`}>
+              <div
+                key={idx}
+                className={`term-line term-${item.type}`}
+              >
                 <pre>{item.text}</pre>
               </div>
             ))}
@@ -380,7 +394,6 @@ Specialized in React, Next.js, AI integration (LLaMA 3.3 via Groq), Python Flask
                 placeholder="Type command here (e.g. ai, weather, skills)..."
               />
             </div>
-            <div ref={terminalEndRef} />
           </div>
         </div>
       </div>

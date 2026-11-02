@@ -2633,6 +2633,9 @@ body {
 .terminal-window {
   max-width: 980px;
   margin: 0 auto;
+  height: 520px;
+  display: flex;
+  flex-direction: column;
   background: #090912;
   border: 1px solid var(--border-medium);
   border-radius: var(--radius-md);
@@ -2640,6 +2643,7 @@ body {
   overflow: hidden;
   position: relative;
   cursor: text;
+  overflow-anchor: none;
 }
 
 .matrix-canvas {
@@ -2749,10 +2753,11 @@ body {
   font-family: var(--font-mono);
   font-size: 0.82rem;
   line-height: 1.6;
-  max-height: 380px;
+  flex: 1;
   overflow-y: auto;
   position: relative;
   z-index: 2;
+  overflow-anchor: none;
 }
 
 .term-line {

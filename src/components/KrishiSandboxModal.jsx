@@ -81,7 +81,7 @@ export default function KrishiSandboxModal({ isOpen, onClose }) {
   const [isTyping, setIsTyping] = useState(false);
   const [selectedScan, setSelectedScan] = useState(SCANNER_SAMPLES[0]);
   const [isScanning, setIsScanning] = useState(false);
-  const chatBottomRef = useRef(null);
+  const messagesContainerRef = useRef(null);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -98,7 +98,9 @@ export default function KrishiSandboxModal({ isOpen, onClose }) {
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    chatBottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
   }, [messages, isTyping]);
 
   if (!isOpen) return null;
@@ -233,7 +235,7 @@ export default function KrishiSandboxModal({ isOpen, onClose }) {
             </div>
 
             {/* Chat Messages Log */}
-            <div className="sandbox-messages-pane">
+            <div className="sandbox-messages-pane" ref={messagesContainerRef}>
               {messages.map((m, idx) => (
                 <div
                   key={idx}
@@ -261,7 +263,6 @@ export default function KrishiSandboxModal({ isOpen, onClose }) {
                   </div>
                 </div>
               )}
-              <div ref={chatBottomRef} />
             </div>
 
             {/* Input Bar */}
